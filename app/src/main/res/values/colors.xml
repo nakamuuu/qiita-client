@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">@color/light_green_500</color>
+    <color name="primary_dark">@color/light_green_700</color>
+    <color name="accent">@color/pink_a200</color>
+    <color name="placeholder">@color/grey_300</color>
+    <color name="divider">#1f000000</color>
+</resources>
