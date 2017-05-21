@@ -18,7 +18,7 @@ import net.divlight.qiita.R
 import net.divlight.qiita.model.Item
 import net.divlight.qiita.viewmodel.MainViewModel
 
-class MainActivity : AppCompatActivity(), ItemAdapter.OnItemClickListener, LifecycleRegistryOwner {
+class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private val lifecycleRegistry = LifecycleRegistry(this)
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: ItemAdapter
@@ -31,7 +31,12 @@ class MainActivity : AppCompatActivity(), ItemAdapter.OnItemClickListener, Lifec
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
 
-        adapter = ItemAdapter(this, this)
+        adapter = ItemAdapter(this).apply {
+            onItemClick = { launchCustomTabs(it.url) }
+            onTagClick = {
+                // TODO: Open tag detail screen
+            }
+        }
         recyclerView.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
@@ -53,18 +58,14 @@ class MainActivity : AppCompatActivity(), ItemAdapter.OnItemClickListener, Lifec
         }
     }
 
-    //
-    // ItemAdapter.OnItemClickListener
-    //
-
-    override fun onItemClick(item: Item) {
+    private fun launchCustomTabs(url: String) {
         CustomTabsIntent.Builder()
                 .setShowTitle(true)
                 .setToolbarColor(ContextCompat.getColor(this, R.color.primary))
                 .setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .build()
-                .launchUrl(this, Uri.parse(item.url))
+                .launchUrl(this, Uri.parse(url))
     }
 
     //

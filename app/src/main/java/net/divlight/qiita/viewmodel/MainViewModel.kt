@@ -18,7 +18,7 @@ class MainViewModel : ViewModel() {
     private var call: Call<List<Item>>? = null
 
     override fun onCleared() {
-        call?.run { cancel() }
+        call?.cancel()
     }
 
     private fun fetchItems() {
