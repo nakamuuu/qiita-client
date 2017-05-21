@@ -14,35 +14,65 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import net.divlight.qiita.R
 import net.divlight.qiita.model.Item
 import net.divlight.qiita.ui.common.DateDiffStringGenerator
+import net.divlight.qiita.ui.common.ProgressFooterViewHolder
 
 class ItemAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var items: List<Item> = ArrayList()
+        set(value) {
+            field = value
+            // FIXME: Use notifyItemRangeInserted or DiffUtils
+            notifyDataSetChanged()
+        }
     var onItemClick: ((item: Item) -> Unit)? = null
     var onTagClick: ((tag: Item.Tag) -> Unit)? = null
-
-    override fun getItemCount(): Int = items.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? {
-        val inflater = LayoutInflater.from(context)
-        val holder = ItemViewHolder(inflater.inflate(R.layout.list_item_item, parent, false), onTagClick)
-        holder.itemView.setOnClickListener {
-            val position = holder.adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                onItemClick?.invoke(items[position])
+    var progressFooterShown: Boolean = false
+        set(value) {
+            field = value
+            if (itemCount > 0) {
+                notifyItemChanged(itemCount - 1)
             }
         }
-        return holder
+
+    private val ITEM_VIEW_TYPE_ITEM = 0
+    private val ITEM_VIEW_TYPE_PROGRESS_FOOTER = 1
+
+    override fun getItemCount(): Int = if (!items.isEmpty()) items.size + 1 else 0
+
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            in 0..(items.size - 1) -> ITEM_VIEW_TYPE_ITEM
+            else -> ITEM_VIEW_TYPE_PROGRESS_FOOTER
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? {
+        return when (viewType) {
+            ITEM_VIEW_TYPE_ITEM -> {
+                val itemView = LayoutInflater.from(context)
+                        .inflate(R.layout.list_item_item, parent, false)
+                ItemViewHolder(itemView, onTagClick).apply {
+                    itemView.setOnClickListener {
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            onItemClick?.invoke(items[adapterPosition])
+                        }
+                    }
+                }
+            }
+            ITEM_VIEW_TYPE_PROGRESS_FOOTER -> ProgressFooterViewHolder(context)
+            else -> null
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? ItemViewHolder)?.setItem(items[position])
+        (holder as? ProgressFooterViewHolder)?.progressBarShown = progressFooterShown
     }
 
-    class ItemViewHolder constructor(view: View, onTagClick: ((tag: Item.Tag) -> Unit)?) : RecyclerView.ViewHolder(view) {
-        private val profileImageView: ImageView = view.findViewById(R.id.profile_image)
-        private val titleView: TextView = view.findViewById(R.id.title)
-        private val detailView: TextView = view.findViewById(R.id.detail)
-        private val tagRecyclerView: RecyclerView = view.findViewById(R.id.tag_recycler_view)
+    class ItemViewHolder constructor(itemView: View, onTagClick: ((tag: Item.Tag) -> Unit)?) : RecyclerView.ViewHolder(itemView) {
+        private val profileImageView: ImageView = itemView.findViewById(R.id.profile_image)
+        private val titleView: TextView = itemView.findViewById(R.id.title)
+        private val detailView: TextView = itemView.findViewById(R.id.detail)
+        private val tagRecyclerView: RecyclerView = itemView.findViewById(R.id.tag_recycler_view)
         private val tagAdapter: ItemTagAdapter
 
         init {

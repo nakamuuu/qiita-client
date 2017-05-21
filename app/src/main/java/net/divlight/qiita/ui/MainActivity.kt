@@ -16,6 +16,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import net.divlight.qiita.R
 import net.divlight.qiita.model.Item
+import net.divlight.qiita.ui.common.OnScrollToEndListenerAdapter
 import net.divlight.qiita.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
@@ -38,17 +39,21 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             }
         }
         recyclerView.adapter = adapter
+        recyclerView.addOnScrollListener(object : OnScrollToEndListenerAdapter() {
+            override fun onScrollToEnd() {
+                recyclerView.post { viewModel.fetchNextPage() }
+            }
+        })
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.items.observe(this, Observer { updateViews(it) })
-
-        updateViews(null)
+        viewModel.status.observe(this, Observer { status ->
+            adapter.progressFooterShown = (status == MainViewModel.FetchStatus.NEXT_PAGE_FETCHING)
+        })
     }
 
     private fun updateViews(items: List<Item>?) {
         adapter.items = items ?: emptyList()
-        adapter.notifyDataSetChanged()
-
         if (items != null) {
             recyclerView.visibility = View.VISIBLE
             progressBar.visibility = View.INVISIBLE
