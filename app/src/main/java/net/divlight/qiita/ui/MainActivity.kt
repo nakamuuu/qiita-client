@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: ItemAdapter
 
+    @BindView(R.id.swipe_refresh_layout) lateinit var swipeRefreshLayout: SwipeRefreshLayout
     @BindView(R.id.recycler_view) lateinit var recyclerView: RecyclerView
     @BindView(R.id.progress_bar) lateinit var progressBar: ProgressBar
 
@@ -31,6 +33,24 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
+
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel.items.observe(this, Observer { adapter.items = it ?: emptyList() })
+        viewModel.status.observe(this, Observer { status ->
+            swipeRefreshLayout.isRefreshing = (status == MainViewModel.FetchStatus.FIRST_PAGE_RELOADING)
+            adapter.progressFooterShown = (status == MainViewModel.FetchStatus.NEXT_PAGE_FETCHING)
+            if (status == MainViewModel.FetchStatus.FIRST_PAGE_FETCHING) {
+                recyclerView.visibility = View.INVISIBLE
+                progressBar.visibility = View.VISIBLE
+            } else {
+                recyclerView.visibility = View.VISIBLE
+                progressBar.visibility = View.INVISIBLE
+            }
+        })
+
+        swipeRefreshLayout.setOnRefreshListener { viewModel.reloadFirstPage() }
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.white)
+        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.primary)
 
         adapter = ItemAdapter(this).apply {
             onItemClick = { launchCustomTabs(it.url) }
@@ -44,23 +64,6 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
                 recyclerView.post { viewModel.fetchNextPage() }
             }
         })
-
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.items.observe(this, Observer { updateViews(it) })
-        viewModel.status.observe(this, Observer { status ->
-            adapter.progressFooterShown = (status == MainViewModel.FetchStatus.NEXT_PAGE_FETCHING)
-        })
-    }
-
-    private fun updateViews(items: List<Item>?) {
-        adapter.items = items ?: emptyList()
-        if (items != null) {
-            recyclerView.visibility = View.VISIBLE
-            progressBar.visibility = View.INVISIBLE
-        } else {
-            recyclerView.visibility = View.INVISIBLE
-            progressBar.visibility = View.VISIBLE
-        }
     }
 
     private fun launchCustomTabs(url: String) {
