@@ -10,16 +10,16 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel : ViewModel() {
-    val items: MutableLiveData<List<Item>> = MutableLiveData()
+    val items: MutableLiveData<List<Item>> by lazy {
+        MutableLiveData<List<Item>>().apply {
+            status.value = FetchStatus.FIRST_PAGE_FETCHING
+            fetchItems()
+        }
+    }
     var status: MutableLiveData<FetchStatus> = MutableLiveData()
 
     private var nextPage: Int = 1
     private var call: Call<List<Item>>? = null
-
-    init {
-        status.value = FetchStatus.FIRST_PAGE_FETCHING
-        fetchItems()
-    }
 
     override fun onCleared() {
         call?.cancel()
