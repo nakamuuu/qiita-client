@@ -9,14 +9,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel : ViewModel() {
+class ItemViewModel : ViewModel() {
+    var query: String? = null
     val items: MutableLiveData<List<Item>> by lazy {
         MutableLiveData<List<Item>>().apply {
             status.value = FetchStatus.FIRST_PAGE_FETCHING
             fetchItems()
         }
     }
-    var status: MutableLiveData<FetchStatus> = MutableLiveData()
+    val status: MutableLiveData<FetchStatus> = MutableLiveData()
 
     private var nextPage: Int = 1
     private var call: Call<List<Item>>? = null
@@ -40,7 +41,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun fetchItems(@IntRange(from = 1) page: Int = 1) {
-        call = QiitaServiceCreator.createService().getItems(page, 20)
+        call = QiitaServiceCreator.createService().getItems(page, 20, query)
         call?.enqueue(object : Callback<List<Item>> {
             override fun onResponse(call: Call<List<Item>>?, response: Response<List<Item>>?) {
                 if (page == 1) {
