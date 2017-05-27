@@ -70,8 +70,7 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
 
         adapter = ItemAdapter(context).apply {
             onItemClick = { launchCustomTabs(it.url) }
-            // TODO: Open tag detail screen
-            // onTagClick = { startActivity(SearchResultActivity.createIntent(context, "tag:" + it.name)) }
+            onTagClick = { startActivity(SearchResultActivity.createIntent(context, "tag:" + it.name)) }
         }
         recyclerView.adapter = adapter
         recyclerView.addOnScrollListener(object : OnScrollToEndListenerAdapter() {
