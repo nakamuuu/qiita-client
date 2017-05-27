@@ -17,7 +17,7 @@ import net.divlight.qiita.ui.common.DateDiffStringGenerator
 import net.divlight.qiita.ui.common.ProgressFooterViewHolder
 
 class ItemAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var items: List<Item> = ArrayList()
+    var items: List<Item> = emptyList()
         set(value) {
             field = value
             // FIXME: Use notifyItemRangeInserted or DiffUtils
