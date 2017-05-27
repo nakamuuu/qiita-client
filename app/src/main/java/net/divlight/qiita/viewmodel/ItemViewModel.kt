@@ -11,7 +11,7 @@ import retrofit2.Response
 
 class ItemViewModel : ViewModel() {
     companion object {
-        private const val ITEMS_PER_PAGE = 20
+        private const val ITEMS_PER_PAGE = 30
     }
 
     var query: String? = null
