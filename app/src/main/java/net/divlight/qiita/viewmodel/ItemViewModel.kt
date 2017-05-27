@@ -10,6 +10,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ItemViewModel : ViewModel() {
+    companion object {
+        private const val ITEMS_PER_PAGE = 20
+    }
+
     var query: String? = null
     val items: MutableLiveData<List<Item>> by lazy {
         MutableLiveData<List<Item>>().apply {
@@ -20,6 +24,7 @@ class ItemViewModel : ViewModel() {
     val status: MutableLiveData<FetchStatus> = MutableLiveData()
 
     private var nextPage: Int = 1
+    private var hasNextPage = true
     private var call: Call<List<Item>>? = null
 
     override fun onCleared() {
@@ -34,25 +39,27 @@ class ItemViewModel : ViewModel() {
     }
 
     fun fetchNextPage() {
-        if (!(status.value?.isFetching ?: false)) {
+        if (!(status.value?.isFetching ?: false) && hasNextPage) {
             status.value = FetchStatus.NEXT_PAGE_FETCHING
             fetchItems(nextPage)
         }
     }
 
     private fun fetchItems(@IntRange(from = 1) page: Int = 1) {
-        call = QiitaServiceCreator.createService().getItems(page, 20, query)
+        call = QiitaServiceCreator.createService().getItems(page, ITEMS_PER_PAGE, query)
         call?.enqueue(object : Callback<List<Item>> {
             override fun onResponse(call: Call<List<Item>>?, response: Response<List<Item>>?) {
+                val fetchedItems = response?.body() ?: emptyList()
                 if (page == 1) {
-                    items.value = response?.body()
+                    items.value = fetchedItems
                 } else {
                     items.value = ((items.value ?: emptyList()).toMutableList()).apply {
-                        addAll(response?.body() ?: emptyList())
+                        addAll(fetchedItems)
                     }.toList()
                 }
                 status.value = FetchStatus.INITIAL
                 nextPage = page + 1
+                hasNextPage = (fetchedItems.size == ITEMS_PER_PAGE)
             }
 
             override fun onFailure(call: Call<List<Item>>?, t: Throwable?) {
