@@ -17,6 +17,11 @@ import net.divlight.qiita.ui.common.DateDiffStringGenerator
 import net.divlight.qiita.ui.common.ProgressFooterViewHolder
 
 class ItemAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    companion object {
+        private const val ITEM_VIEW_TYPE_ITEM = 0
+        private const val ITEM_VIEW_TYPE_PROGRESS_FOOTER = 1
+    }
+
     var items: List<Item> = emptyList()
         set(value) {
             field = value
@@ -32,9 +37,6 @@ class ItemAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
                 notifyItemChanged(itemCount - 1)
             }
         }
-
-    private val ITEM_VIEW_TYPE_ITEM = 0
-    private val ITEM_VIEW_TYPE_PROGRESS_FOOTER = 1
 
     override fun getItemCount(): Int = if (!items.isEmpty()) items.size + 1 else 0
 

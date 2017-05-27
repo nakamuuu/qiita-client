@@ -8,7 +8,7 @@ import android.view.MenuItem
 
 class SearchResultActivity : AppCompatActivity() {
     companion object {
-        private val EXTRA_QUERY = "query"
+        private const val EXTRA_QUERY = "query"
 
         fun createIntent(context: Context, query: String? = null): Intent =
                 Intent(context, SearchResultActivity::class.java).apply {

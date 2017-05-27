@@ -24,7 +24,7 @@ import net.divlight.qiita.viewmodel.ItemViewModel
 
 class ItemFragment : Fragment(), LifecycleRegistryOwner {
     companion object {
-        private val ARGS_QUERY = "query"
+        private const val ARGS_QUERY = "query"
 
         fun newInstance(query: String? = null): ItemFragment = ItemFragment().apply {
             arguments = Bundle().apply { putString(ARGS_QUERY, query) }

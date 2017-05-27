@@ -6,9 +6,11 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class DateDiffStringGenerator(val context: Context, val date: Date) {
-    private val ONE_DAY_IN_MILLS = TimeUnit.DAYS.toMillis(1)
-    private val ONE_HOUR_IN_MILLS = TimeUnit.HOURS.toMillis(1)
-    private val ONE_MINUTE_IN_MILLS = TimeUnit.MINUTES.toMillis(1)
+    companion object {
+        private val ONE_DAY_IN_MILLS = TimeUnit.DAYS.toMillis(1)
+        private val ONE_HOUR_IN_MILLS = TimeUnit.HOURS.toMillis(1)
+        private val ONE_MINUTE_IN_MILLS = TimeUnit.MINUTES.toMillis(1)
+    }
 
     fun toCreatedAtDiffString(): String {
         val diff = Date().time - date.time
