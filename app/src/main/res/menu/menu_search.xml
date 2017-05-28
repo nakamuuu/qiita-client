@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/voice"
+        android:icon="@drawable/ic_voice_black54_24dp"
+        android:title=""
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/clear"
+        android:icon="@drawable/ic_clear_black_24dp"
+        android:title=""
+        app:showAsAction="ifRoom" />
+</menu>

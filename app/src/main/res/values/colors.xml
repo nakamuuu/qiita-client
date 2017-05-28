@@ -4,6 +4,10 @@
     <color name="primary_dark">@color/light_green_700</color>
     <color name="accent">@color/pink_a200</color>
 
+    <color name="status_bar_light">#afafaf</color>
+    <color name="status_bar_light_v23">#e0e0e0</color>
+    <color name="action_bar_light">#f5f5f5</color>
+
     <color name="primary_text">#de000000</color>
     <color name="secondary_text">#8a000000</color>
     <color name="hint_text">#42000000</color>

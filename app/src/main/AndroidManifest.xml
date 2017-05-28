@@ -20,6 +20,11 @@
         </activity>
 
         <activity
+            android:name=".ui.SearchActivity"
+            android:theme="@style/Theme.Qiita.Light"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+
+        <activity
             android:name=".ui.SearchResultActivity"
             android:label="@string/search_result_title" />
 

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Widget.Qiita.Toolbar.ActionBar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@color/primary</item>
         <item name="android:elevation">4dp</item>
         <item name="android:theme">@style/ThemeOverlay.Qiita.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="Widget.Qiita.Toolbar.ActionBar.Light" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/action_bar_light</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:theme">@style/ThemeOverlay.Qiita.ActionBar.Light</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 </resources>
