@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import net.divlight.qiita.R
 
 class SearchResultActivity : AppCompatActivity() {
     companion object {
@@ -22,6 +23,7 @@ class SearchResultActivity : AppCompatActivity() {
         val query = intent.extras.getString(EXTRA_QUERY)
         supportActionBar?.subtitle = query
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black54_24dp)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
