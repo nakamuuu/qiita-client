@@ -1,6 +1,10 @@
 package net.divlight.qiita.ui
 
 import android.app.Activity
+import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.LifecycleRegistryOwner
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -9,35 +13,69 @@ import android.speech.RecognizerIntent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import net.divlight.qiita.R
 import net.divlight.qiita.ui.common.TextWatcherAdapter
+import net.divlight.qiita.viewmodel.SearchViewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
     companion object {
         private val REQUEST_CODE_VOICE_RECOGNIZER = Activity.RESULT_FIRST_USER
 
         fun createIntent(context: Context): Intent = Intent(context, SearchActivity::class.java)
     }
 
-    @BindView(R.id.toolbar) internal lateinit var toolbar: Toolbar
+    private val lifecycleRegistry = LifecycleRegistry(this)
+    private lateinit var viewModel: SearchViewModel
     private lateinit var queryEditView: EditText
+    private lateinit var adapter: TagAdapter
+
+    @BindView(R.id.toolbar) internal lateinit var toolbar: Toolbar
+    @BindView(R.id.recycler_view) internal lateinit var recyclerView: RecyclerView
+    @BindView(R.id.progress_bar) internal lateinit var progressBar: ProgressBar
+    @BindView(R.id.error) internal lateinit var errorView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         ButterKnife.bind(this)
         setSupportActionBar(toolbar)
+
+        viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
+        viewModel.tags.observe(this, Observer { adapter.tags = it ?: emptyList() })
+        viewModel.status.observe(this, Observer {
+            when (it) {
+                SearchViewModel.FetchStatus.INITIAL -> {
+                    recyclerView.visibility = View.VISIBLE
+                    progressBar.visibility = View.INVISIBLE
+                    errorView.visibility = View.INVISIBLE
+                }
+                SearchViewModel.FetchStatus.FETCHING -> {
+                    recyclerView.visibility = View.INVISIBLE
+                    progressBar.visibility = View.VISIBLE
+                    errorView.visibility = View.INVISIBLE
+                }
+                SearchViewModel.FetchStatus.ERROR -> {
+                    recyclerView.visibility = View.INVISIBLE
+                    progressBar.visibility = View.INVISIBLE
+                    errorView.visibility = View.VISIBLE
+                }
+            }
+        })
 
         queryEditView = EditText(this).apply {
             background = null
@@ -59,13 +97,17 @@ class SearchActivity : AppCompatActivity() {
                 true
             })
         }
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowCustomEnabled(true)
         supportActionBar?.setCustomView(queryEditView, ActionBar.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ))
+
+        adapter = TagAdapter(this).apply {
+            onTagClick = { startActivity(SearchResultActivity.createIntent(context, "tag:" + it.id)) }
+        }
+        recyclerView.adapter = adapter
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,7 +127,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
-
 
     //
     // Options Menu
@@ -125,4 +166,10 @@ class SearchActivity : AppCompatActivity() {
         }
         else -> super.onOptionsItemSelected(item)
     }
+
+    //
+    // LifecycleRegistryOwner
+    //
+
+    override fun getLifecycle(): LifecycleRegistry = lifecycleRegistry
 }
