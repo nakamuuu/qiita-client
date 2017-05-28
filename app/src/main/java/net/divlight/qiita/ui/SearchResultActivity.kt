@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import butterknife.BindView
+import butterknife.ButterKnife
 import net.divlight.qiita.R
 
 class SearchResultActivity : AppCompatActivity() {
@@ -17,17 +20,21 @@ class SearchResultActivity : AppCompatActivity() {
                 }
     }
 
+    @BindView(R.id.toolbar) internal lateinit var toolbar: Toolbar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_search_result)
+        ButterKnife.bind(this)
+        setSupportActionBar(toolbar)
 
         val query = intent.extras.getString(EXTRA_QUERY)
         supportActionBar?.subtitle = query
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black54_24dp)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(android.R.id.content, ItemFragment.newInstance(query))
+                    .replace(R.id.container, ItemFragment.newInstance(query))
                     .commit()
         }
     }
