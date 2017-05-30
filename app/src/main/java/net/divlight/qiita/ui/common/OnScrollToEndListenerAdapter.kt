@@ -10,9 +10,7 @@ abstract class OnScrollToEndListenerAdapter : RecyclerView.OnScrollListener() {
     }
 
     override final fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-        if (recyclerView == null) {
-            return
-        }
+        recyclerView ?: return
 
         val layoutManager = recyclerView.layoutManager as? LinearLayoutManager
                 ?: throw IllegalArgumentException("A parent RecyclerView must use " + LinearLayoutManager::class.java)
