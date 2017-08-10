@@ -26,8 +26,8 @@ ext {
     versionName = "0.1.0"
     versionCode = 1
 
-    compileSdkVersion = "android-O"
-    buildToolsVersion = "26.0.0-rc2"
+    compileSdkVersion = 26
+    buildToolsVersion = "26.0.1"
     minSdkVersion = 21
     targetSdkVersion = 25
 
