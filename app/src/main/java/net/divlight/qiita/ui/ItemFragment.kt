@@ -2,7 +2,6 @@ package net.divlight.qiita.ui
 
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +18,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import net.divlight.qiita.R
+import net.divlight.qiita.extension.arch.observeNonNull
 import net.divlight.qiita.ui.common.OnScrollToEndListenerAdapter
 import net.divlight.qiita.viewmodel.ItemViewModel
 
@@ -51,8 +51,8 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
 
         viewModel = ViewModelProviders.of(this).get(ItemViewModel::class.java)
         viewModel.query = arguments.getString(ARGS_QUERY)
-        viewModel.items.observe(this, Observer { adapter.items = it ?: emptyList() })
-        viewModel.status.observe(this, Observer { status ->
+        viewModel.items.observeNonNull(this, { adapter.items = it })
+        viewModel.status.observeNonNull(this, { status ->
             swipeRefreshLayout.isRefreshing = (status == ItemViewModel.FetchStatus.FIRST_PAGE_RELOADING)
             adapter.progressFooterShown = (status == ItemViewModel.FetchStatus.NEXT_PAGE_FETCHING)
             if (status == ItemViewModel.FetchStatus.FIRST_PAGE_FETCHING) {

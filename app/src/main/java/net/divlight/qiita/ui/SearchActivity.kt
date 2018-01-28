@@ -3,7 +3,6 @@ package net.divlight.qiita.ui
 import android.app.Activity
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -29,8 +28,10 @@ import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import net.divlight.qiita.R
+import net.divlight.qiita.extension.arch.observeNonNull
 import net.divlight.qiita.ui.common.TextWatcherAdapter
 import net.divlight.qiita.viewmodel.SearchViewModel
+import java.lang.IllegalStateException
 
 class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
     companion object {
@@ -56,9 +57,9 @@ class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
         setSupportActionBar(toolbar)
 
         viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
-        viewModel.tags.observe(this, Observer { adapter.tags = it ?: emptyList() })
-        viewModel.status.observe(this, Observer {
-            when (it) {
+        viewModel.tags.observeNonNull(this, { adapter.tags = it })
+        viewModel.status.observeNonNull(this, { status ->
+            when (status) {
                 SearchViewModel.FetchStatus.INITIAL -> {
                     recyclerView.visibility = View.VISIBLE
                     progressBar.visibility = View.INVISIBLE
@@ -74,6 +75,7 @@ class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
                     progressBar.visibility = View.INVISIBLE
                     errorView.visibility = View.VISIBLE
                 }
+                else -> throw IllegalStateException()
             }
         })
 
