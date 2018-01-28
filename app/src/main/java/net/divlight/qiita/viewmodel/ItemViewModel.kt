@@ -32,14 +32,14 @@ class ItemViewModel : ViewModel() {
     }
 
     fun reloadFirstPage() {
-        if (!(status.value?.isFetching ?: false)) {
+        if (status.value?.isFetching != true) {
             status.value = FetchStatus.FIRST_PAGE_RELOADING
             fetchItems()
         }
     }
 
     fun fetchNextPage() {
-        if (!(status.value?.isFetching ?: false) && hasNextPage) {
+        if (status.value?.isFetching != true && hasNextPage) {
             status.value = FetchStatus.NEXT_PAGE_FETCHING
             fetchItems(nextPage)
         }
