@@ -1,4 +1,4 @@
-package net.divlight.qiita.ui.common
+package net.divlight.qiita.ui.common.recyclerview
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView

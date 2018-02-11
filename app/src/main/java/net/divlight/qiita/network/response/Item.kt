@@ -1,4 +1,4 @@
-package net.divlight.qiita.model
+package net.divlight.qiita.network.response
 
 import java.util.*
 

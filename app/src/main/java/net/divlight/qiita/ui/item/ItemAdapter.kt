@@ -1,4 +1,4 @@
-package net.divlight.qiita.ui
+package net.divlight.qiita.ui.item
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -12,9 +12,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import net.divlight.qiita.R
-import net.divlight.qiita.model.Item
+import net.divlight.qiita.network.response.Item
 import net.divlight.qiita.ui.common.DateDiffStringGenerator
-import net.divlight.qiita.ui.common.ProgressFooterViewHolder
+import net.divlight.qiita.ui.common.recyclerview.ProgressFooterViewHolder
 
 class ItemAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {

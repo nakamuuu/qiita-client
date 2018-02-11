@@ -1,7 +1,7 @@
-package net.divlight.qiita.service
+package net.divlight.qiita.network
 
-import net.divlight.qiita.model.Item
-import net.divlight.qiita.model.Tag
+import net.divlight.qiita.network.response.Item
+import net.divlight.qiita.network.response.Tag
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

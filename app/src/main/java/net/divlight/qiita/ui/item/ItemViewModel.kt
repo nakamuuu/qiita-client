@@ -1,10 +1,10 @@
-package net.divlight.qiita.viewmodel
+package net.divlight.qiita.ui.item
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.IntRange
-import net.divlight.qiita.model.Item
-import net.divlight.qiita.service.QiitaServiceCreator
+import net.divlight.qiita.network.QiitaServiceCreator
+import net.divlight.qiita.network.response.Item
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

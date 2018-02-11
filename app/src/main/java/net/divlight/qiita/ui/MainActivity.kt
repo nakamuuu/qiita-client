@@ -8,9 +8,12 @@ import android.view.MenuItem
 import butterknife.BindView
 import butterknife.ButterKnife
 import net.divlight.qiita.R
+import net.divlight.qiita.ui.item.ItemFragment
+import net.divlight.qiita.ui.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
-    @BindView(R.id.toolbar) internal lateinit var toolbar: Toolbar
+    @BindView(R.id.toolbar)
+    internal lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

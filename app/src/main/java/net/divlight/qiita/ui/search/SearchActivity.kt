@@ -1,4 +1,4 @@
-package net.divlight.qiita.ui
+package net.divlight.qiita.ui.search
 
 import android.app.Activity
 import android.arch.lifecycle.LifecycleRegistry
@@ -29,8 +29,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import net.divlight.qiita.R
 import net.divlight.qiita.extension.arch.observeNonNull
+import net.divlight.qiita.ui.SearchResultActivity
 import net.divlight.qiita.ui.common.TextWatcherAdapter
-import net.divlight.qiita.viewmodel.SearchViewModel
 import java.lang.IllegalStateException
 
 class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
@@ -45,10 +45,14 @@ class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private lateinit var queryEditView: EditText
     private lateinit var adapter: TagAdapter
 
-    @BindView(R.id.toolbar) internal lateinit var toolbar: Toolbar
-    @BindView(R.id.recycler_view) internal lateinit var recyclerView: RecyclerView
-    @BindView(R.id.progress_bar) internal lateinit var progressBar: ProgressBar
-    @BindView(R.id.error) internal lateinit var errorView: TextView
+    @BindView(R.id.toolbar)
+    internal lateinit var toolbar: Toolbar
+    @BindView(R.id.recycler_view)
+    internal lateinit var recyclerView: RecyclerView
+    @BindView(R.id.progress_bar)
+    internal lateinit var progressBar: ProgressBar
+    @BindView(R.id.error)
+    internal lateinit var errorView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

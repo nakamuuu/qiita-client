@@ -1,4 +1,4 @@
-package net.divlight.qiita.service
+package net.divlight.qiita.network
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder

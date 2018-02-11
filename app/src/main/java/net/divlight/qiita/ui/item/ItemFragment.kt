@@ -1,4 +1,4 @@
-package net.divlight.qiita.ui
+package net.divlight.qiita.ui.item
 
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
@@ -19,8 +19,8 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import net.divlight.qiita.R
 import net.divlight.qiita.extension.arch.observeNonNull
-import net.divlight.qiita.ui.common.OnScrollToEndListenerAdapter
-import net.divlight.qiita.viewmodel.ItemViewModel
+import net.divlight.qiita.ui.SearchResultActivity
+import net.divlight.qiita.ui.common.recyclerview.OnScrollToEndListenerAdapter
 
 class ItemFragment : Fragment(), LifecycleRegistryOwner {
     companion object {
@@ -36,9 +36,12 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
     private lateinit var viewModel: ItemViewModel
     private lateinit var adapter: ItemAdapter
 
-    @BindView(R.id.swipe_refresh_layout) lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    @BindView(R.id.recycler_view) lateinit var recyclerView: RecyclerView
-    @BindView(R.id.progress_bar) lateinit var progressBar: ProgressBar
+    @BindView(R.id.swipe_refresh_layout)
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    @BindView(R.id.recycler_view)
+    lateinit var recyclerView: RecyclerView
+    @BindView(R.id.progress_bar)
+    lateinit var progressBar: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_item, container, false)?.apply {

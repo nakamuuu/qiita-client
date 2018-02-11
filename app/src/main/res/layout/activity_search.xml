@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="net.divlight.qiita.ui.SearchActivity">
+    tools:context="net.divlight.qiita.ui.search.SearchActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
