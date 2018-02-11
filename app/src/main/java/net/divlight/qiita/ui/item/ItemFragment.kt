@@ -66,8 +66,9 @@ class ItemFragment : Fragment() {
                 progressBar.visibility = View.INVISIBLE
             }
         })
+        lifecycle.addObserver(viewModel)
 
-        swipeRefreshLayout.setOnRefreshListener { viewModel.reloadFirstPage() }
+        swipeRefreshLayout.setOnRefreshListener { viewModel.onRefreshItems() }
         swipeRefreshLayout.setColorSchemeResources(android.R.color.white)
         swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.primary)
 
@@ -86,7 +87,7 @@ class ItemFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.addOnScrollListener(object : OnScrollToEndListenerAdapter() {
             override fun onScrollToEnd() {
-                recyclerView.post { viewModel.fetchNextPage() }
+                recyclerView.post { viewModel.onScrollToEnd() }
             }
         })
     }

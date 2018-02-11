@@ -1,6 +1,9 @@
 package net.divlight.qiita.ui.item
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.OnLifecycleEvent
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.IntRange
 import net.divlight.qiita.network.QiitaServiceCreator
@@ -9,36 +12,39 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ItemViewModel : ViewModel() {
+class ItemViewModel : ViewModel(), LifecycleObserver {
     companion object {
         private const val ITEMS_PER_PAGE = 30
     }
 
     var query: String? = null
-    val items: MutableLiveData<List<Item>> by lazy {
-        MutableLiveData<List<Item>>().apply {
-            status.value = FetchStatus.FIRST_PAGE_FETCHING
-            fetchItems()
-        }
-    }
+    val items: MutableLiveData<List<Item>> = MutableLiveData()
     val status: MutableLiveData<FetchStatus> = MutableLiveData()
 
     private var nextPage: Int = 1
     private var hasNextPage = true
     private var call: Call<List<Item>>? = null
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate() {
+        if (items.value?.isEmpty() != false) {
+            status.value = FetchStatus.FIRST_PAGE_FETCHING
+            fetchItems()
+        }
+    }
+
     override fun onCleared() {
         call?.cancel()
     }
 
-    fun reloadFirstPage() {
+    fun onRefreshItems() {
         if (status.value?.isFetching != true) {
             status.value = FetchStatus.FIRST_PAGE_RELOADING
             fetchItems()
         }
     }
 
-    fun fetchNextPage() {
+    fun onScrollToEnd() {
         if (status.value?.isFetching != true && hasNextPage) {
             status.value = FetchStatus.NEXT_PAGE_FETCHING
             fetchItems(nextPage)

@@ -79,6 +79,7 @@ class SearchActivity : AppCompatActivity() {
                 else -> throw IllegalStateException()
             }
         })
+        lifecycle.addObserver(viewModel)
 
         queryEditView = EditText(this).apply {
             background = null
