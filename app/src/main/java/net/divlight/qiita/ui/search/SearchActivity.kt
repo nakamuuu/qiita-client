@@ -1,8 +1,6 @@
 package net.divlight.qiita.ui.search
 
 import android.app.Activity
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -33,14 +31,13 @@ import net.divlight.qiita.ui.SearchResultActivity
 import net.divlight.qiita.ui.common.TextWatcherAdapter
 import java.lang.IllegalStateException
 
-class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
+class SearchActivity : AppCompatActivity() {
     companion object {
         private val REQUEST_CODE_VOICE_RECOGNIZER = Activity.RESULT_FIRST_USER
 
         fun createIntent(context: Context): Intent = Intent(context, SearchActivity::class.java)
     }
 
-    private val lifecycleRegistry = LifecycleRegistry(this)
     private lateinit var viewModel: SearchViewModel
     private lateinit var queryEditView: EditText
     private lateinit var adapter: TagAdapter
@@ -193,10 +190,4 @@ class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
         }
         else -> super.onOptionsItemSelected(item)
     }
-
-    //
-    // LifecycleRegistryOwner
-    //
-
-    override fun getLifecycle(): LifecycleRegistry = lifecycleRegistry
 }

@@ -1,7 +1,5 @@
 package net.divlight.qiita.ui.item
 
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.ViewModelProviders
 import android.net.Uri
 import android.os.Bundle
@@ -22,7 +20,7 @@ import net.divlight.qiita.extension.arch.observeNonNull
 import net.divlight.qiita.ui.SearchResultActivity
 import net.divlight.qiita.ui.common.recyclerview.OnScrollToEndListenerAdapter
 
-class ItemFragment : Fragment(), LifecycleRegistryOwner {
+class ItemFragment : Fragment() {
     companion object {
         private const val ARGS_QUERY = "query"
 
@@ -31,7 +29,6 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
         }
     }
 
-    private val lifecycleRegistry = LifecycleRegistry(this)
     private lateinit var unbinder: Unbinder
     private lateinit var viewModel: ItemViewModel
     private lateinit var adapter: ItemAdapter
@@ -113,10 +110,4 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
             .build()
             .launchUrl(context, Uri.parse(url))
     }
-
-    //
-    // LifecycleRegistryOwner
-    //
-
-    override fun getLifecycle(): LifecycleRegistry = lifecycleRegistry
 }
