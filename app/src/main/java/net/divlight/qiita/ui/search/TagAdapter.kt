@@ -24,7 +24,7 @@ class TagAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewH
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? {
         val itemView = LayoutInflater.from(context)
-                .inflate(R.layout.list_item_tag, parent, false)
+            .inflate(R.layout.list_item_tag, parent, false)
         return ItemViewHolder(itemView).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -46,11 +46,14 @@ class TagAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewH
         fun setTag(tag: Tag) {
             val context = itemView.context
             Glide.with(iconImageView)
-                    .load(tag.iconUrl)
-                    .apply(RequestOptions().centerCrop().placeholder(R.drawable.circle_placeholder))
-                    .into(iconImageView)
+                .load(tag.iconUrl)
+                .apply(RequestOptions().centerCrop().placeholder(R.drawable.circle_placeholder))
+                .into(iconImageView)
             titleView.text = tag.id
-            itemCountView.text = context.getString(R.string.search_tags_item_count_format, tag.itemsCount)
+            itemCountView.text = context.getString(
+                R.string.search_tags_item_count_format,
+                tag.itemsCount
+            )
         }
     }
 }

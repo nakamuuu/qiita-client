@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.ProgressBar
 import net.divlight.qiita.R
 
-class ProgressFooterViewHolder(context: Context) : RecyclerView.ViewHolder(View.inflate(context, R.layout.progress_footer, null)) {
+class ProgressFooterViewHolder(context: Context) : RecyclerView.ViewHolder(
+    View.inflate(context, R.layout.progress_footer, null)
+) {
     var progressBarShown: Boolean
         set(value) {
             progressBar.visibility = if (value) View.VISIBLE else View.INVISIBLE
@@ -17,8 +19,9 @@ class ProgressFooterViewHolder(context: Context) : RecyclerView.ViewHolder(View.
 
     init {
         itemView.layoutParams = RecyclerView.LayoutParams(
-                RecyclerView.LayoutParams.MATCH_PARENT,
-                RecyclerView.LayoutParams.WRAP_CONTENT)
+            RecyclerView.LayoutParams.MATCH_PARENT,
+            RecyclerView.LayoutParams.WRAP_CONTENT
+        )
         progressBarShown = false
     }
 }

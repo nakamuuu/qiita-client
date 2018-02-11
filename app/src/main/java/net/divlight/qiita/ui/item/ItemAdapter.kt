@@ -51,7 +51,7 @@ class ItemAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
         return when (viewType) {
             ITEM_VIEW_TYPE_ITEM -> {
                 val itemView = LayoutInflater.from(context)
-                        .inflate(R.layout.list_item_item, parent, false)
+                    .inflate(R.layout.list_item_item, parent, false)
                 ItemViewHolder(itemView, onTagClick).apply {
                     itemView.setOnClickListener {
                         if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -70,7 +70,10 @@ class ItemAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
         (holder as? ProgressFooterViewHolder)?.progressBarShown = progressFooterShown
     }
 
-    class ItemViewHolder constructor(itemView: View, onTagClick: ((tag: Item.Tag) -> Unit)?) : RecyclerView.ViewHolder(itemView) {
+    class ItemViewHolder constructor(itemView: View, onTagClick: ((tag: Item.Tag) -> Unit)?) :
+        RecyclerView.ViewHolder(
+            itemView
+        ) {
         private val profileImageView: ImageView = itemView.findViewById(R.id.profile_image)
         private val titleView: TextView = itemView.findViewById(R.id.title)
         private val detailView: TextView = itemView.findViewById(R.id.detail)
@@ -90,13 +93,15 @@ class ItemAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.View
         fun setItem(item: Item) {
             val context = itemView.context
             Glide.with(profileImageView)
-                    .load(item.user.profileImageUrl)
-                    .apply(RequestOptions().circleCrop().placeholder(R.drawable.circle_placeholder))
-                    .into(profileImageView)
+                .load(item.user.profileImageUrl)
+                .apply(RequestOptions().circleCrop().placeholder(R.drawable.circle_placeholder))
+                .into(profileImageView)
             titleView.text = item.title
-            detailView.text = context.getString(R.string.item_detail_label_format,
-                    item.user.id,
-                    DateDiffStringGenerator(context, item.createdAt).toCreatedAtDiffString())
+            detailView.text = context.getString(
+                R.string.item_detail_label_format,
+                item.user.id,
+                DateDiffStringGenerator(context, item.createdAt).toCreatedAtDiffString()
+            )
 
             tagAdapter.tags = item.tags
             tagAdapter.notifyDataSetChanged()

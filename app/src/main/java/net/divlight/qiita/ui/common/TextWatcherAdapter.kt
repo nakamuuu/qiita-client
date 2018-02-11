@@ -3,7 +3,7 @@ package net.divlight.qiita.ui.common
 import android.text.Editable
 import android.text.TextWatcher
 
-abstract class TextWatcherAdapter: TextWatcher {
+abstract class TextWatcherAdapter : TextWatcher {
     override fun afterTextChanged(s: Editable?) {
     }
 

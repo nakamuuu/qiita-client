@@ -16,9 +16,9 @@ class SearchResultActivity : AppCompatActivity() {
         private const val EXTRA_QUERY = "query"
 
         fun createIntent(context: Context, query: String? = null): Intent =
-                Intent(context, SearchResultActivity::class.java).apply {
-                    putExtra(EXTRA_QUERY, query)
-                }
+            Intent(context, SearchResultActivity::class.java).apply {
+                putExtra(EXTRA_QUERY, query)
+            }
     }
 
     @BindView(R.id.toolbar)
@@ -36,8 +36,8 @@ class SearchResultActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, ItemFragment.newInstance(query))
-                    .commit()
+                .replace(R.id.container, ItemFragment.newInstance(query))
+                .commit()
         }
     }
 

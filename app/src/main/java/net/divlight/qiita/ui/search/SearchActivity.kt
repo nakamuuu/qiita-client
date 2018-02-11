@@ -95,23 +95,37 @@ class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
                     invalidateOptionsMenu()
                 }
             })
-            setOnEditorActionListener({ _, actionId, _ ->
+            setOnEditorActionListener { _, actionId, _ ->
                 val query = queryEditView.text.toString()
                 if (actionId == EditorInfo.IME_ACTION_SEARCH && !query.isNullOrEmpty()) {
-                    startActivity(SearchResultActivity.createIntent(this@SearchActivity, query))
+                    startActivity(
+                        SearchResultActivity.createIntent(
+                            this@SearchActivity,
+                            query
+                        )
+                    )
                 }
                 true
-            })
+            }
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowCustomEnabled(true)
-        supportActionBar?.setCustomView(queryEditView, ActionBar.LayoutParams(
+        supportActionBar?.setCustomView(
+            queryEditView, ActionBar.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
-        ))
+            )
+        )
 
         adapter = TagAdapter(this).apply {
-            onTagClick = { startActivity(SearchResultActivity.createIntent(context, "tag:" + it.id)) }
+            onTagClick = {
+                startActivity(
+                    SearchResultActivity.createIntent(
+                        context,
+                        "tag:" + it.id
+                    )
+                )
+            }
         }
         recyclerView.adapter = adapter
     }
@@ -128,7 +142,7 @@ class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
             } else {
                 if (queryEditView.requestFocus()) {
                     (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                            .showSoftInput(queryEditView, InputMethodManager.SHOW_IMPLICIT)
+                        .showSoftInput(queryEditView, InputMethodManager.SHOW_IMPLICIT)
                 }
             }
         }
@@ -158,10 +172,17 @@ class SearchActivity : AppCompatActivity(), LifecycleRegistryOwner {
         R.id.voice -> {
             try {
                 startActivityForResult(Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                    putExtra(
+                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                    )
                 }, REQUEST_CODE_VOICE_RECOGNIZER)
             } catch (e: ActivityNotFoundException) {
-                Toast.makeText(this@SearchActivity, "Error : ActivityNotFoundException", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@SearchActivity,
+                    "Error : ActivityNotFoundException",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             true
         }

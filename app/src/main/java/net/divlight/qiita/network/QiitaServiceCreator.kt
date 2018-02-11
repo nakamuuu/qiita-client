@@ -13,13 +13,13 @@ object QiitaServiceCreator {
 
     fun createService(): QiitaService {
         val gson = GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create()
         val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(createOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
+            .baseUrl(BASE_URL)
+            .client(createOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
         return retrofit.create(QiitaService::class.java)
     }
 

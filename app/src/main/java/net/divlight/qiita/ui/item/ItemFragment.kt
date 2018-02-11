@@ -43,7 +43,11 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
     @BindView(R.id.progress_bar)
     lateinit var progressBar: ProgressBar
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater?,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater?.inflate(R.layout.fragment_item, container, false)?.apply {
             unbinder = ButterKnife.bind(this@ItemFragment, this)
         }
@@ -56,7 +60,8 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
         viewModel.query = arguments.getString(ARGS_QUERY)
         viewModel.items.observeNonNull(this, { adapter.items = it })
         viewModel.status.observeNonNull(this, { status ->
-            swipeRefreshLayout.isRefreshing = (status == ItemViewModel.FetchStatus.FIRST_PAGE_RELOADING)
+            swipeRefreshLayout.isRefreshing =
+                    (status == ItemViewModel.FetchStatus.FIRST_PAGE_RELOADING)
             adapter.progressFooterShown = (status == ItemViewModel.FetchStatus.NEXT_PAGE_FETCHING)
             if (status == ItemViewModel.FetchStatus.FIRST_PAGE_FETCHING) {
                 recyclerView.visibility = View.INVISIBLE
@@ -73,7 +78,14 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
 
         adapter = ItemAdapter(context).apply {
             onItemClick = { launchCustomTabs(it.url) }
-            onTagClick = { startActivity(SearchResultActivity.createIntent(context, "tag:" + it.name)) }
+            onTagClick = {
+                startActivity(
+                    SearchResultActivity.createIntent(
+                        context,
+                        "tag:" + it.name
+                    )
+                )
+            }
         }
         recyclerView.adapter = adapter
         recyclerView.addOnScrollListener(object : OnScrollToEndListenerAdapter() {
@@ -90,12 +102,16 @@ class ItemFragment : Fragment(), LifecycleRegistryOwner {
 
     private fun launchCustomTabs(url: String) {
         CustomTabsIntent.Builder()
-                .setShowTitle(true)
-                .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
-                .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
-                .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .build()
-                .launchUrl(context, Uri.parse(url))
+            .setShowTitle(true)
+            .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
+            .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+            .setExitAnimations(
+                context,
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right
+            )
+            .build()
+            .launchUrl(context, Uri.parse(url))
     }
 
     //
