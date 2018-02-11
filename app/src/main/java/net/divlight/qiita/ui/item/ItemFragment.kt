@@ -41,20 +41,18 @@ class ItemFragment : Fragment() {
     lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
-        inflater: LayoutInflater?,
+        inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater?.inflate(R.layout.fragment_item, container, false)?.apply {
-            unbinder = ButterKnife.bind(this@ItemFragment, this)
-        }
+    ): View? = inflater.inflate(R.layout.fragment_item, container, false)?.apply {
+        unbinder = ButterKnife.bind(this@ItemFragment, this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ItemViewModel::class.java)
-        viewModel.query = arguments.getString(ARGS_QUERY)
+        viewModel.query = arguments?.getString(ARGS_QUERY)
         viewModel.items.observeNonNull(this, { adapter.items = it })
         viewModel.status.observeNonNull(this, { status ->
             swipeRefreshLayout.isRefreshing =
@@ -73,6 +71,7 @@ class ItemFragment : Fragment() {
         swipeRefreshLayout.setColorSchemeResources(android.R.color.white)
         swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.primary)
 
+        val context = context ?: throw IllegalStateException("context must not be null.")
         adapter = ItemAdapter(context).apply {
             onItemClick = { launchCustomTabs(it.url) }
             onTagClick = {
@@ -98,6 +97,7 @@ class ItemFragment : Fragment() {
     }
 
     private fun launchCustomTabs(url: String) {
+        val context = context ?: throw IllegalStateException("context must not be null.")
         CustomTabsIntent.Builder()
             .setShowTitle(true)
             .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
