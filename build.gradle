@@ -31,7 +31,7 @@ ext {
     minSdkVersion = 21
     targetSdkVersion = 27
 
-    supportLibraryVersion = "27.0.2"
+    supportLibraryVersion = "27.1.1"
     archLifecycleVersion = "1.1.0"
     glideVersion = "4.0.0"
     flexboxLayoutVersion = "0.3.0-alpha3"

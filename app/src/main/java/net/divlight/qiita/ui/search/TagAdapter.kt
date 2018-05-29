@@ -22,7 +22,7 @@ class TagAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewH
 
     override fun getItemCount(): Int = tags.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = LayoutInflater.from(context)
             .inflate(R.layout.list_item_tag, parent, false)
         return ItemViewHolder(itemView).apply {
