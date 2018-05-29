@@ -33,6 +33,10 @@ android {
         maxProcessCount 4
         javaMaxHeapSize "3g"
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
