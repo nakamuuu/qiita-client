@@ -8,6 +8,8 @@
     <string name="search_tags_item_count_format">%1$d件の投稿</string>
     <string name="search_result_title">Search</string>
 
+    <string name="item_empty">表示する投稿がありません。</string>
+    <string name="item_fetch_error">投稿の取得に失敗しました。</string>
     <string name="item_detail_label_format">%1$s - %2$s</string>
     <string name="item_created_at_days_format">%1$d日前に投稿</string>
     <string name="item_created_at_hours_format">%1$d時間前に投稿</string>

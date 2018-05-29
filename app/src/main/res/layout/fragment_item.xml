@@ -1,28 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="net.divlight.qiita.ui.item.ItemViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:visibility="gone"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+            app:onRefresh="@{() -> viewModel.onSwipeRefresh()}"
+            app:refreshing="@{viewModel.fetchStatus.shouldShowRefreshIndicator}">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:visibility="@{viewModel.fetchStatus.shouldShowContent ? View.VISIBLE : View.GONE}"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:onScrollToEnd="@{() -> viewModel.onScrollToEnd()}" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-</FrameLayout>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.fetchStatus.shouldShowProgressBar ? View.VISIBLE : View.GONE}" />
+
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+            android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+            android:text="@string/item_empty"
+            android:visibility="@{viewModel.errorState.shouldShowEmptyText ? View.VISIBLE : View.GONE}" />
+
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingRight"
+            android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
+            android:text="@string/item_fetch_error"
+            android:visibility="@{viewModel.errorState.shouldShowErrorText ? View.VISIBLE : View.GONE}" />
+
+    </FrameLayout>
+
+</layout>

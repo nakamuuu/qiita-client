@@ -2,17 +2,16 @@ package net.divlight.qiita.ui.common
 
 import android.content.Context
 import net.divlight.qiita.R
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
-class DateDiffStringGenerator(val context: Context, val date: Date) {
-    companion object {
-        private val ONE_DAY_IN_MILLS = TimeUnit.DAYS.toMillis(1)
-        private val ONE_HOUR_IN_MILLS = TimeUnit.HOURS.toMillis(1)
-        private val ONE_MINUTE_IN_MILLS = TimeUnit.MINUTES.toMillis(1)
-    }
+object DateDiffStringUtils {
+    private val ONE_DAY_IN_MILLS = TimeUnit.DAYS.toMillis(1)
+    private val ONE_HOUR_IN_MILLS = TimeUnit.HOURS.toMillis(1)
+    private val ONE_MINUTE_IN_MILLS = TimeUnit.MINUTES.toMillis(1)
 
-    fun toCreatedAtDiffString(): String {
+    @JvmStatic
+    fun getCreatedAtDiffString(context: Context, date: Date): String {
         val diff = Date().time - date.time
         return when {
             (diff > ONE_DAY_IN_MILLS) -> {
