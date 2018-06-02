@@ -42,7 +42,7 @@ fun ImageView.loadWithGlide(
 //
 
 @BindingAdapter("refreshing")
-fun SwipeRefreshLayout.setRefreing(refreshing: Boolean) {
+fun SwipeRefreshLayout.setRefreshing(refreshing: Boolean) {
     isRefreshing = refreshing
 }
 
